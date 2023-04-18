@@ -17,9 +17,14 @@ public class SessionService
         _redisClient = redisClient;
     }
 
-    public User Me()
+    public async Task<User> Me()
     {
-        return _tokenProvider.Validated;
+        var user = _tokenProvider.Validated;
+        var session = await _redisClient.Db0.GetAsync<string>($"sessions:{user.Id}");
+
+        if (session is null) throw new UnauthorizedAccessException();
+
+        return user;
     }
 
     public async IAsyncEnumerable<User> List()

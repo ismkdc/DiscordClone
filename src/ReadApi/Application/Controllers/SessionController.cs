@@ -16,9 +16,9 @@ public class SessionController : ControllerBase
     }
 
     [HttpGet("me")]
-    public IActionResult Me()
+    public async Task<IActionResult> Me()
     {
-        return Ok(_sessionService.Me());
+        return Ok(await _sessionService.Me());
     }
 
     [HttpGet("list")]

@@ -1,5 +1,7 @@
 ﻿using System.Text;
+using System.Text.Json;
 using Centrifugo.AspNetCore.Abstractions;
+using Common.Domain.Dtos;
 using StackExchange.Redis.Extensions.Core.Abstractions;
 using WriteApi.Domain.Events;
 using WriteApi.Infrastructure.Channels;
@@ -25,28 +27,46 @@ public class SessionKillBgWorker : BackgroundService
         while (!stoppingToken.IsCancellationRequested)
         {
             var socketChannels = await _centrifugoClient.Channels();
-            
-            var onlineUsersFromSocket = socketChannels
+
+            var onlineUsersOnSocket = socketChannels
                 .Result
                 .Channels
                 .Select(x => x.Key)
-                .Where(x => x.StartsWith("user-"))
-                .Select(x => x[5..])
-                .Select(x => Encoding.UTF8.GetString(Convert.FromBase64String(x)));
+                .ToArray();
 
-            var onlineUsersFromRedis = await _redisClient.Db0.Database.ListRangeAsync("online-users");
-
-            var toKilledUsers = onlineUsersFromRedis
-                .Select(x => x.ToString())
-                .Where(x => !onlineUsersFromSocket.Contains(x));
-
-            foreach (var killedUser in toKilledUsers)
+            var socketUserIdList = new List<Guid>();
+            foreach (var onlineUserOnSocket in onlineUsersOnSocket)
             {
-                await _redisClient.Db0.Database.ListRemoveAsync("online-users", killedUser);
-                await _centrifugoWriteChannel.WriteAsync(new CentrifugoPublishEvent(new { KilledUser = killedUser },
-                    "del-online-user"));
+                if (Guid.TryParse(onlineUserOnSocket, out var userId))
+                    socketUserIdList.Add(userId);
+            }
 
-                Console.WriteLine($"Killed session: {killedUser}");
+            if (!socketUserIdList.Any())
+            {
+                var onlineUsersOnRedis = await _redisClient.Db0.Database.ListRangeAsync("online-users");
+                var userList = onlineUsersOnRedis
+                    .Select(x => x.ToString())
+                    .Select(x => JsonSerializer.Deserialize<User>(x))
+                    .ToList();
+
+                foreach (var user in userList.Where(user => !socketUserIdList.Contains(user.Id)))
+                {
+                    user.IsOnline = false;
+                    
+                    await _redisClient.Db0.RemoveAsync($"sessions:{user.Id}");
+                    await _centrifugoWriteChannel.WriteAsync(new CentrifugoPublishEvent(new { Id = user.Id },
+                        "del-online-user"));
+
+                    Console.WriteLine($"Killed session: {JsonSerializer.Serialize(user)}");
+                }
+
+                await _redisClient.Db0.Database.KeyDeleteAsync("online-users");
+                
+                await Task.WhenAll
+                (
+                    userList.Select(u =>
+                        _redisClient.Db0.Database.ListRightPushAsync("online-users", JsonSerializer.Serialize(u)))
+                );
             }
 
             await Task.Delay(60 * 1000, stoppingToken);

@@ -29,7 +29,10 @@ public class SessionService
 
         var json = JsonSerializer.Serialize(user);
 
-        await _redisClient.Db0.Database.ListRightPushAsync("online-users", json);
+        await Task.WhenAll(
+            _redisClient.Db0.AddAsync($"sessions:{user.Id}", jwt),
+            _redisClient.Db0.Database.ListRightPushAsync("online-users", json)
+        );
         await _centrifugoWriteChannel.WriteAsync(new CentrifugoPublishEvent(user, "add-online-user"));
 
         return new SessionResponse(user, jwt);

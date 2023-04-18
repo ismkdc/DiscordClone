@@ -4,6 +4,8 @@ namespace Common.Domain.Dtos;
 
 public record User(Guid Id, string Name, string ProfileImageUrl)
 {
+    public bool IsOnline { get; set; } = true;
+
     private static readonly RealNameGenerator NameGenerator = new();
 
     public static User Generate()
