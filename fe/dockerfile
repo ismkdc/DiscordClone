@@ -1,0 +1,17 @@
+FROM node:14-alpine as builder
+
+RUN apk --no-cache add \
+  git openssh g++ gcc libgcc libstdc++ linux-headers make python3
+
+WORKDIR /usr/app
+
+COPY ./ ./
+
+RUN yarn install
+
+RUN yarn run build
+
+FROM nginx:alpine
+EXPOSE 80
+COPY --from=builder /usr/app/build /usr/share/nginx/html
+COPY --from=builder /usr/app/build/static /usr/share/nginx/html/discord-react-clone/static
