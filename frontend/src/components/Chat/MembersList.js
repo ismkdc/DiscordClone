@@ -67,6 +67,11 @@ const MembersList = ({ guildRolesList, members, onMemberClick }) => {
 
     delSub.on('publication', (ctx) => {
       data.users[ctx.data.Id].hide = true;
+
+      setOnlineMembers((onlineMembers) => [
+        ...onlineMembers
+      ]);
+
     });
 
     return () => {
