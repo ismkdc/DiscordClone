@@ -6,6 +6,23 @@ import App from './components/App';
 
 console.log("app start")
 
+if (window.localStorage.getItem('token') !== null) {
+    const token = JSON.parse(window.localStorage.getItem('token'));
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('GET', 'https://read-api-discord.ismkdc.com/read-api/sessions/me', false);
+    xhr.setRequestHeader('Authentication', token);
+    xhr.send(null);
+    
+    if (xhr.status === 401) {
+        console.error('Unauthorized:', xhr.statusText);
+        window.localStorage.removeItem('token');
+        window.localStorage.removeItem('user');
+    } else {
+        console.error('Error retrieving user:', xhr.statusText);
+    }
+}
+
 
 if (window.localStorage.getItem('token') === null) {
     console.log("login");
