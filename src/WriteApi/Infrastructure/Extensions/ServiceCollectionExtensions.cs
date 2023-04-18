@@ -24,6 +24,7 @@ public static class ServiceCollectionExtensions
         services.AddHostedService<RedisWriteBgWorker>();
         services.AddHostedService<MongoWriteBgWorker>();
         services.AddHostedService<CentrifugoWriteBgWorker>();
+        services.AddHostedService<SessionKillBgWorker>();
 
         return services;
     }

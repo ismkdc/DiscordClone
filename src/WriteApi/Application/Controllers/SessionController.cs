@@ -19,10 +19,4 @@ public class SessionController : ControllerBase
     {
         return Ok(await _sessionService.Create());
     }
-
-    [HttpDelete("kill")]
-    public async Task<IActionResult> Kill()
-    {
-        return Ok(await _sessionService.Kill());
-    }
 }

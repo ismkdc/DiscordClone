@@ -33,11 +33,18 @@ const MembersList = ({ guildRolesList, members, onMemberClick }) => {
   const [onlineMembers, setOnlineMembers] = useState([]);
 
   useEffect(() => {
-    const sub = centrifuge.newSubscription('online-users');
-    sub.subscribe();
+    const privateSub = centrifuge.newSubscription('user-' + window.btoa(window.localStorage.getItem('user')));
+    privateSub.subscribe();
+    
+    const addSub = centrifuge.newSubscription('add-online-user');
+    addSub.subscribe();
+
+    const delSub = centrifuge.newSubscription('del-online-user');
+    delSub.subscribe();
+
     centrifuge.connect();
 
-    sub.on('publication', (ctx) => {
+    addSub.on('publication', (ctx) => {
       let user = {
         id: ctx.data.Id,
         username: ctx.data.Name,
@@ -56,13 +63,14 @@ const MembersList = ({ guildRolesList, members, onMemberClick }) => {
       ]);
     });
 
-    // sub.on('leave', (ctx) => {
-    //   const user = data.users[ctx.data.Id];
-    //   setOnlineMembers((onlineMembers) => onlineMembers.filter((u) => u.id !== user.id));
-    // });
+    delSub.on('publication', (ctx) => {
+      const user = data.users[ctx.data.Id];
+      setOnlineMembers((onlineMembers) => onlineMembers.filter((u) => u.id !== user.id));
+    });
 
     return () => {
-      sub.unsubscribe();
+      addSub.unsubscribe();
+      delSub.unsubscribe();
       centrifuge.disconnect();
     };
   }, []);
@@ -101,7 +109,7 @@ const MembersList = ({ guildRolesList, members, onMemberClick }) => {
       <ScrollableArea forceVertical tinyStyle autoHide>
         {
           <React.Fragment>
-             <StyledRoleName>
+            <StyledRoleName>
               {Object.keys(data.users).length} Online
             </StyledRoleName>
 
