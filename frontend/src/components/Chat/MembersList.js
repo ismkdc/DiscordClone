@@ -65,7 +65,7 @@ const MembersList = ({ guildRolesList, members, onMemberClick }) => {
 
     delSub.on('publication', (ctx) => {
       var delUser = JSON.stringify(ctx.data);
-      setOnlineMembers((onlineMembers) => onlineMembers.filter((u) => u.id !== delUser.Id));
+      delUser.hide = true;
     });
 
     return () => {
@@ -104,32 +104,33 @@ const MembersList = ({ guildRolesList, members, onMemberClick }) => {
     }
   });
 
+  const renderMemberList = () => {
+    const users = Object.values(data.users).filter(user => !user.hide);
+    const userCount = users.length;
+    return (
+      <React.Fragment>
+        <StyledRoleName>
+          {userCount} Online
+        </StyledRoleName>
+        {
+          users.map(user => (
+            <MemberListItem
+              key={user.id}
+              member={user}
+              color={"white"}
+              onMemberClick={onMemberClick}
+            />
+          ))
+        }
+      </React.Fragment>
+    );
+  };
+  
+
   return (
     <StyledMemberList>
       <ScrollableArea forceVertical tinyStyle autoHide>
-        {
-          <React.Fragment>
-            <StyledRoleName>
-              {Object.keys(data.users).length} Online
-            </StyledRoleName>
-
-            {
-              Object.values(data.users).map((user) => {
-                console.log("current user", user);
-                return (
-                  <MemberListItem
-                    key={user.id}
-                    member={user}
-                    color={"white"}
-                    onMemberClick={onMemberClick}
-                  />
-                );
-              })
-            }
-
-
-          </React.Fragment>
-        }
+        {renderMemberList()}
       </ScrollableArea>
     </StyledMemberList>
   );
