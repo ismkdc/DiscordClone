@@ -106,6 +106,7 @@ const MembersList = ({ guildRolesList, members, onMemberClick }) => {
 
   const renderMemberList = () => {
     const users = Object.values(data.users).filter(user => !user.hide);
+    console.log("onlineMembers", users)
     const userCount = users.length;
     return (
       <React.Fragment>

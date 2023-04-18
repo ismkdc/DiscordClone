@@ -69,7 +69,7 @@ public class SessionKillBgWorker : BackgroundService
                 );
             }
 
-            await Task.Delay(60 * 1000, stoppingToken);
+            await Task.Delay(60 * 1000 * 10, stoppingToken);
         }
     }
 }

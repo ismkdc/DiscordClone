@@ -56,13 +56,14 @@ const getUsers = () => {
   if (xhr.status === 200) {
     const data = JSON.parse(xhr.responseText);
 
-    data.forEach(({ id, name, profileImageUrl }) => {
+    data.forEach(({ id, name, profileImageUrl, isOnline }) => {
       usersObj[id] = {
         id,
         username: name,
         avatar: profileImageUrl,
         activity: {},
-        tag: 7126
+        tag: 7126,
+        hide: isOnline
       };
     });
     console.log(Object.keys(usersObj).length);
