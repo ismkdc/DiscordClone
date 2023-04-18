@@ -24,23 +24,29 @@ public class SessionKillBgWorker : BackgroundService
     {
         while (!stoppingToken.IsCancellationRequested)
         {
-            var channels = await _centrifugoClient.Channels();
-            var userChannels = channels
+            var socketChannels = await _centrifugoClient.Channels();
+            
+            var onlineUsersFromSocket = socketChannels
                 .Result
                 .Channels
                 .Select(x => x.Key)
-                .Where(x => x.StartsWith("user-"));
+                .Where(x => x.StartsWith("user-"))
+                .Select(x => x[5..])
+                .Select(x => Encoding.UTF8.GetString(Convert.FromBase64String(x)));
 
-            foreach (var userChannel in userChannels)
+            var onlineUsersFromRedis = await _redisClient.Db0.Database.ListRangeAsync("online-users");
+
+            var toKilledUsers = onlineUsersFromRedis
+                .Select(x => x.ToString())
+                .Where(x => !onlineUsersFromSocket.Contains(x));
+
+            foreach (var killedUser in toKilledUsers)
             {
-                var userId = userChannel[5..];
-                var base64DecodedString = Encoding.UTF8.GetString(Convert.FromBase64String(userId));
-
-                await _redisClient.Db0.Database.ListRemoveAsync("online-users", base64DecodedString);
-                await _centrifugoWriteChannel.WriteAsync(new CentrifugoPublishEvent(new { Id = userId },
+                await _redisClient.Db0.Database.ListRemoveAsync("online-users", killedUser);
+                await _centrifugoWriteChannel.WriteAsync(new CentrifugoPublishEvent(new { KilledUser = killedUser },
                     "del-online-user"));
-                
-                Console.WriteLine($"Killed session: {base64DecodedString}");
+
+                Console.WriteLine($"Killed session: {killedUser}");
             }
 
             await Task.Delay(60 * 1000, stoppingToken);

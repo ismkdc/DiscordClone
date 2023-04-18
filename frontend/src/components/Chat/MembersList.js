@@ -35,7 +35,7 @@ const MembersList = ({ guildRolesList, members, onMemberClick }) => {
   useEffect(() => {
     const privateSub = centrifuge.newSubscription('user-' + window.btoa(window.localStorage.getItem('user')));
     privateSub.subscribe();
-    
+
     const addSub = centrifuge.newSubscription('add-online-user');
     addSub.subscribe();
 
@@ -64,8 +64,8 @@ const MembersList = ({ guildRolesList, members, onMemberClick }) => {
     });
 
     delSub.on('publication', (ctx) => {
-      const user = data.users[ctx.data.Id];
-      setOnlineMembers((onlineMembers) => onlineMembers.filter((u) => u.id !== user.id));
+      var delUser = JSON.stringify(ctx.data);
+      setOnlineMembers((onlineMembers) => onlineMembers.filter((u) => u.id !== delUser.Id));
     });
 
     return () => {
