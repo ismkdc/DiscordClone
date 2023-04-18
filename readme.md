@@ -34,19 +34,19 @@ This project is a Discord-like messaging application that uses ASP.NET Core 7.0 
 
 bashCopy code
 
-`git clone https://github.com/your_username/your_repository.git` 
+`git clone https://github.com/ismkdc/DiscordClone` 
 
 2.  Navigate to the project directory:
 
 bashCopy code
 
-`cd your_repository` 
+`cd DiscordClone` 
 
 3.  Build and start Docker containers:
 
 bashCopy code
 
-`docker-compose up --build -d` 
+`docker compose up --build -d` 
 
 4.  Install frontend dependencies:
 
