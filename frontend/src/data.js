@@ -63,7 +63,7 @@ const getUsers = () => {
         avatar: profileImageUrl,
         activity: {},
         tag: 7126,
-        hide: isOnline
+        hide: !isOnline
       };
     });
     console.log(Object.keys(usersObj).length);

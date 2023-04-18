@@ -18,8 +18,6 @@ if (window.localStorage.getItem('token') !== null) {
         console.error('Unauthorized:', xhr.statusText);
         window.localStorage.removeItem('token');
         window.localStorage.removeItem('user');
-    } else {
-        console.error('Error retrieving user:', xhr.statusText);
     }
 }
 

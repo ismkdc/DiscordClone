@@ -33,7 +33,8 @@ const MembersList = ({ guildRolesList, members, onMemberClick }) => {
   const [onlineMembers, setOnlineMembers] = useState([]);
 
   useEffect(() => {
-    const privateSub = centrifuge.newSubscription(JSON.stringify(window.localStorage.getItem('user').id));
+    const privateSubChannel = JSON.parse(window.localStorage.getItem('user')).id;
+    const privateSub = centrifuge.newSubscription(privateSubChannel);
     privateSub.subscribe();
 
     const addSub = centrifuge.newSubscription('add-online-user');
@@ -52,7 +53,7 @@ const MembersList = ({ guildRolesList, members, onMemberClick }) => {
         activity: {},
         tag: 7126,
         roles: [],
-        hide: false
+        hide: !ctx.data.IsOnline
       };
 
       data.users[ctx.data.Id] = user;
