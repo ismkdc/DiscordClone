@@ -41,7 +41,7 @@ public class SessionKillBgWorker : BackgroundService
                     socketUserIdList.Add(userId);
             }
 
-            if (!socketUserIdList.Any())
+            if (socketUserIdList.Any())
             {
                 var onlineUsersOnRedis = await _redisClient.Db0.Database.ListRangeAsync("online-users");
                 var userList = onlineUsersOnRedis
