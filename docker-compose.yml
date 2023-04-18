@@ -1,0 +1,122 @@
+version: '3.9'
+services:  
+    redis-master:
+        image: 'bitnami/redis:latest'
+        restart: always
+        sysctls:
+            net.core.somaxconn: 65365
+        environment:
+            - REDIS_REPLICATION_MODE=master
+            - REDIS_PASSWORD=secret
+        networks:
+            - prod
+
+    redis-replica:
+        image: 'bitnami/redis:latest'
+        restart: always
+        sysctls:
+            net.core.somaxconn: 65365
+        depends_on:
+            - redis-master
+        environment:
+            - REDIS_REPLICATION_MODE=slave
+            - REDIS_MASTER_HOST=redis-master
+            - REDIS_MASTER_PORT_NUMBER=6379
+            - REDIS_MASTER_PASSWORD=secret
+            - REDIS_PASSWORD=secret
+        networks:
+            - prod
+        scale: 3
+    
+    mongo:
+      image: mongo
+      restart: always
+      environment:
+        MONGO_INITDB_ROOT_USERNAME: root
+        MONGO_INITDB_ROOT_PASSWORD: secret
+
+    write-api:
+        build:
+            context: src
+            dockerfile: ../dockerfile.writeapi
+        restart: always
+        depends_on:
+            - mongo
+            - centrifugo
+            - redis-master
+            - redis-replica
+        environment:
+            ASPNETCORE_ENVIRONMENT: Prod
+        networks:
+            - prod
+        scale: 1
+
+    read-api:
+        build:
+            context: src
+            dockerfile: ../dockerfile.readapi
+        restart: always
+        depends_on:
+            - mongo
+            - centrifugo
+            - redis-master
+            - redis-replica
+        environment:
+            ASPNETCORE_ENVIRONMENT: Prod
+        networks:
+            - prod
+        scale: 1
+
+    mongo-express:
+      image: mongo-express
+      restart: always
+      ports:
+        - 127.0.0.1:8081:8081
+      environment:
+          - ME_CONFIG_MONGODB_ADMINUSERNAME=root
+          - ME_CONFIG_MONGODB_ADMINPASSWORD=secret
+          - ME_CONFIG_MONGODB_URL=mongodb://root:secret@mongo:27017/
+
+    nginx:
+        image: nginx:alpine
+        restart: always
+        volumes:
+            - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+            - ./nginx/ssl/nginx-selfsigned.crt:/etc/ssl/certs/nginx-selfsigned.crt:ro
+            - ./nginx/ssl/nginx-selfsigned.key:/etc/ssl/private/nginx-selfsigned.key:ro
+            - /var/log/nginx:/var/log/nginx
+        depends_on:
+            - write-api
+            - read-api
+            - centrifugo
+            - frontend
+        ports:
+            - 443:443
+            - 443:443/udp
+        networks:
+            - prod
+
+    centrifugo:
+        image: centrifugo/centrifugo:v4
+        restart: always
+        command: centrifugo --admin --config=/var/centrifugo/config.json
+        ulimits:
+            nofile:
+                soft: 65535
+                hard: 65535
+        volumes:
+            - ./centrifugo/config.json:/var/centrifugo/config.json:ro
+        networks:
+            - prod
+            
+    frontend:
+        build:
+            context: frontend
+            dockerfile: dockerfile
+        restart: always
+        networks:
+            - prod
+    
+
+networks:
+    prod:

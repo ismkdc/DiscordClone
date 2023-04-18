@@ -1,0 +1,13 @@
+{
+    "token_hmac_secret_key": "secret",
+    "admin_password": "secret",
+    "admin_secret": "secret",
+    "api_key": "secret",
+    "client_insecure": true,
+    "allowed_origins": [
+      "*"
+    ],
+    "usage_stats_disable": true,
+    "allow_user_limited_channels": true,
+    "allow_subscribe_for_client": true
+  }
