@@ -20,7 +20,7 @@ public class SessionService
     public async Task<User> Me()
     {
         var user = _tokenProvider.Validated;
-        var session = await _redisClient.Db0.GetAsync<string>($"sessions:{user.Id}");
+        var session = await _redisClient.Db0.GetAsync<string>($"sessions:{user.Id}", flag: CommandFlags.PreferReplica);
 
         if (session is null) throw new UnauthorizedAccessException();
 
