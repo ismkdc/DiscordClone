@@ -1,16 +1,18 @@
 
 # Project Title: Discord React Clone with ASP.NET Core 7.0 Backend
 
+[Demo](https://discord.ismkdc.com)
+
 This project is a Discord-like messaging application that uses ASP.NET Core 7.0 as the backend, along with Docker Compose, Redis Cluster, Centrifugo WebSocket server, .NET Core Channels, and background workers. The frontend is built using the [Discord React Clone](https://github.com/rafaelalmeidatk/discord-react-clone) project by Rafael Almeida.
 
 ## Table of Contents
 
-1.  [Features](https://chat.openai.com/?model=gpt-4#features)
-2.  [Prerequisites](https://chat.openai.com/?model=gpt-4#prerequisites)
-3.  [Installation](https://chat.openai.com/?model=gpt-4#installation)
-4.  [Usage](https://chat.openai.com/?model=gpt-4#usage)
-5.  [Contributing](https://chat.openai.com/?model=gpt-4#contributing)
-6.  [License](https://chat.openai.com/?model=gpt-4#license)
+1.  [Features]
+2.  [Prerequisites]
+3.  [Installation]
+4.  [Usage
+5.  [Contributing]
+6.  [License]
 
 ## Features
 
