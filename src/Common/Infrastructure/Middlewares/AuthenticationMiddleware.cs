@@ -33,10 +33,17 @@ public class AuthenticationMiddleware
 
         var authHeader = context.Request.Headers["Authentication"].FirstOrDefault();
 
-        if (authHeader != null && tokenProvider.Validate(authHeader))
+        try
         {
-            await _next(context);
-            return;
+            if (authHeader != null && tokenProvider.Validate(authHeader))
+            {
+                await _next(context);
+                return;
+            }
+        }
+        catch
+        {
+            // ignored
         }
 
         context.Response.StatusCode = 401;
