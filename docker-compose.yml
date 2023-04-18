@@ -34,6 +34,8 @@ services:
       environment:
         MONGO_INITDB_ROOT_USERNAME: root
         MONGO_INITDB_ROOT_PASSWORD: secret
+      networks:
+            - prod
 
     write-api:
         build:
@@ -76,6 +78,8 @@ services:
           - ME_CONFIG_MONGODB_ADMINUSERNAME=root
           - ME_CONFIG_MONGODB_ADMINPASSWORD=secret
           - ME_CONFIG_MONGODB_URL=mongodb://root:secret@mongo:27017/
+      networks:
+            - prod
 
     nginx:
         image: nginx:alpine
