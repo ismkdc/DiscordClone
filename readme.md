@@ -26,7 +26,7 @@ This project is a Discord-like messaging application that uses ASP.NET Core 7.0 
 -   [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/install/) installed
 -   [Node.js](https://nodejs.org/en/download/) and [Yarn](https://yarnpkg.com/) for frontend development
 -   [ASP.NET Core 7.0 SDK](https://dotnet.microsoft.com/download/dotnet/7.0) for backend development
--   [Centrifugo](https://centrifugal.github.io/centrifugo/) installed
+-   [Centrifugo](https://centrifugal.dev/) installed
 
 ## Installation
 
