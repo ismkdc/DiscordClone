@@ -3,7 +3,7 @@
 
 [Demo](https://discord.ismkdc.com)
 
-This project is a Discord-like messaging application that uses ASP.NET Core 7.0 as the backend, along with Docker Compose, Redis Cluster, Centrifugo WebSocket server, .NET Core Channels, and background workers. The frontend is built using the [Discord React Clone](https://github.com/rafaelalmeidatk/discord-react-clone) project by Rafael Almeida.
+This project is a Discord-like messaging application that uses ASP.NET Core 8.0 as the backend, along with Docker Compose, Redis Cluster, Centrifugo WebSocket server, .NET Core Channels, and background workers. The frontend is built using the [Discord React Clone](https://github.com/rafaelalmeidatk/discord-react-clone) project by Rafael Almeida.
 
 ## Table of Contents
 
@@ -32,32 +32,25 @@ This project is a Discord-like messaging application that uses ASP.NET Core 7.0 
 
 1.  Clone this repository:
 
-bashCopy code
-
 `git clone https://github.com/ismkdc/DiscordClone` 
 
 2.  Navigate to the project directory:
 
-bashCopy code
 
 `cd DiscordClone` 
 
 3.  Build and start Docker containers:
 
-bashCopy code
 
 `docker compose up --build -d` 
 
 4.  Install frontend dependencies:
-
-bashCopy code
 
 `cd discord-react-clone
 yarn install` 
 
 5.  Start the frontend development server:
 
-bashCopy code
 
 `yarn start` 
 
@@ -77,4 +70,4 @@ bashCopy code
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE] file for more information.
+This project is licensed under the MIT License. See the LICENSE file for more information.
