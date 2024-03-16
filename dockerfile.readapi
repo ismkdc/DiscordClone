@@ -6,7 +6,7 @@ COPY . .
 RUN dotnet publish "ReadApi/ReadApi.csproj" -c Release -o /out
 
 # Runtime image
-FROM mcr.microsoft.com/dotnet/aspnet:7.0
+FROM mcr.microsoft.com/dotnet/aspnet:8.0
 
 WORKDIR /app
 COPY --from=build-env /out .
