@@ -1,5 +1,5 @@
 
-# Project Title: Discord React Clone with ASP.NET Core 7.0 Backend
+# Project Title: Discord React Clone with ASP.NET Core 8.0 Backend
 
 [Demo](https://discord.ismkdc.com)
 
