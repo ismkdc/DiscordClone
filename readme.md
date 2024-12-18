@@ -24,7 +24,7 @@ This project is a Discord-like messaging application that uses ASP.NET Core 9.0 
 
 -   [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/install/) installed
 -   [Node.js](https://nodejs.org/en/download/) and [Yarn](https://yarnpkg.com/) for frontend development
--   [ASP.NET Core 8.0 SDK](https://dotnet.microsoft.com/download/dotnet/8.0) for backend development
+-   [ASP.NET Core 9.0 SDK](https://dotnet.microsoft.com/download/dotnet/9.0) for backend development
 -   [Centrifugo](https://centrifugal.dev/) installed
 
 ## Installation
