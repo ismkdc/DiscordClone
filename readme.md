@@ -1,7 +1,6 @@
 
 # Project Title: Discord React Clone with ASP.NET Core 9.0 Backend
 
-[Demo](https://discord.ismkdc.com)
 
 This project is a Discord-like messaging application that uses ASP.NET Core 9.0 as the backend, along with Docker Compose, Redis Cluster, Centrifugo WebSocket server, .NET Core Channels, and background workers. The frontend is built using the [Discord React Clone](https://github.com/rafaelalmeidatk/discord-react-clone) project by Rafael Almeida.
 
