@@ -1,14 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>net8.0</TargetFramework>
+        <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="jose-jwt" Version="4.1.0"/>
-        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
+        <PackageReference Include="jose-jwt" Version="5.1.0" />
+        <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
         <PackageReference Include="NameGenerator" Version="2.0.4"/>
         <PackageReference Include="StackExchange.Redis.Extensions.AspNetCore" Version="10.2.0" />
         <PackageReference Include="StackExchange.Redis.Extensions.System.Text.Json" Version="10.2.0" />
